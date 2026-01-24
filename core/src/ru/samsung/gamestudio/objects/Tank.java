@@ -2,79 +2,105 @@ package ru.samsung.gamestudio.objects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+import ru.samsung.gamestudio.GameResources;
+import ru.samsung.gamestudio.GameSettings;
 
-public class Tank {
-    int x, y;
-    int width, height;
-    Texture[] framesArray;
-    int speed;
+public class Tank extends GameObject {
 
-    int hp;
-    int direction;
-    Texture texture;
-    Tank tank;
+    long lastShotTime;
+    int livesLeft;
+    int rotation;
+    TextureRegion textureRegion;
+    private World world;
 
-    public Tank(int x, int y, int width, int height, int speed, int hp) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.speed = speed;
-        this.hp = hp;
-        framesArray = new Texture[]{ // спрайты танка, повернутые под разным углом
-                new Texture("textures/tank/tank_right.jpeg"),   //заменить спрайты на нормальные потом в формате png
-                new Texture("textures/tank/tank_left.jpeg"),
-                new Texture("textures/tank/tank_up.jpeg"),
-                new Texture("textures/tank/tank_down.jpeg")};
-        texture = framesArray[2];
+    public Tank(int y, int x, int width, int height, String texturePath, World world) {
+        super(texturePath, x, y, width, height, GameSettings.SHIP_BIT, world);
+        this.world = world;
+        livesLeft = 3;
+        textureRegion = new TextureRegion(getTexture());
+        rotation = 0;
+        lastShotTime = System.currentTimeMillis();
     }
 
 
     //эту функцию нужно будет вызывать в handleInput, где направление будет зависить от нажатой кнопки
-    public void move(int dir){
-        direction = dir;
-        switch (dir){
-            case 1: // право // почему то при движении вправо, танк одновременно движется влево
-                x += speed;
-                texture = framesArray[dir - 1];
-                //break; //если поставить break, то работает, хотя я уверен что есть другое решение
+    public void move(int dir) {
+        switch (dir) {
+            case 0: // стоп
+                body.setLinearVelocity(0, 0);
+                break;
+            case 1: // право
+                body.setLinearVelocity(GameSettings.TANK_SPEED, 0);
+                rotation = 270;
+                break;
             case 2: // лево
-                x -= speed;
-                texture = framesArray[dir - 1];
-            case 3: // вверх // почему то при движении вверх, танк одновременно движется вниз
-                y += speed;
-                texture = framesArray[dir - 1];
-                //break;
+                body.setLinearVelocity(-GameSettings.TANK_SPEED, 0);
+                rotation = 90;
+                break;
+            case 3: // вверх
+                body.setLinearVelocity(0, GameSettings.TANK_SPEED);
+                rotation = 0;
+                break;
             case 4: // вниз
-                y -= speed;
-                texture = framesArray[dir - 1];
+                body.setLinearVelocity(0, -GameSettings.TANK_SPEED);
+                rotation = 180;
+                break;
         }
-    }
-
-    public void needToShoot() { // реализовать потом. есть ли способ поварачивать спрайты, без необходимости использовать одни и те же повернутые картинки?
-        switch (direction){
-            case 1:
-                x += speed;
-            case 2:
-                x -= speed;
-            case 3:
-                y += speed;
-            case 4:
-                y -= speed;
         }
-    }
 
-    public int getDirection() {
-        return direction;
-    }
-    public int getX() {
-        return x;
-    }
-    public int getY() {
-        return y;
+
+    public BulletObject needToShoot() {
+        long currentTime = System.currentTimeMillis();
+        // Проверяем задержку между выстрелами (например, 500 мс)
+        if (currentTime - lastShotTime > 500) {
+            lastShotTime = currentTime;
+
+            // Вычисляем позицию для выстрела в зависимости от направления танка
+            int bulletX = getX();
+            int bulletY = getY();
+
+            switch (rotation) {
+                case 0: // вверх
+                    bulletY += height / 2;
+                    break;
+                case 90: // влево
+                    bulletX -= width / 2;
+                    break;
+                case 180: // вниз
+                    bulletY -= height / 2;
+                    break;
+                case 270: // вправо
+                    bulletX += width / 2;
+                    break;
+            }
+
+            // Создаем пулю с правильным направлением
+            BulletObject bullet = new BulletObject(
+                    GameResources.BULLET_IMG_PATH,
+                    bulletX, bulletY,
+                    GameSettings.BULLET_WIDTH,
+                    GameSettings.BULLET_HEIGHT,
+                    world,
+                    rotation // Передаем направление для пули
+            );
+
+            return bullet;
+        }
+        return null;
     }
 
     public void draw(SpriteBatch batch) {
-        batch.draw(texture, x - (width / 2f), y - (height / 2f), width, height);
+        batch.draw(textureRegion,
+                getX() - (width / 2f),
+                getY() - (height / 2f),
+                width / 2f,  // точка вращения X
+                height / 2f, // точка вращения Y
+                width,
+                height,
+                1, 1,
+                rotation);
     }
 }
