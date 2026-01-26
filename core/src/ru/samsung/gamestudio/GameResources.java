@@ -11,4 +11,7 @@ public class GameResources {
     public static final String TANK_IMG_PATH = "textures/tank/tank_up.jpeg";
     public static final String TARGET_PNG_PATH = "textures/arrows/target.png";
     public static final String BULLET_IMG_PATH = "textures/tank/bullet_up.png";
+    public static final String WALL_ING_PATH = "textures/wall.png";
+
+    public static final String BUTTON_LONG_BG_IMG_PATH = "textures/button_long.png";
 }
