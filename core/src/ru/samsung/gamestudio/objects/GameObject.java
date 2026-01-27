@@ -10,6 +10,8 @@ public class GameObject {
 
     public int width, height;
 
+    public boolean dynamic;
+
     public short cBits;
 
     public Body body;
@@ -22,6 +24,17 @@ public class GameObject {
         this.cBits = cBits;
 
         texture = new Texture(texturePath);
+        this.dynamic = true;
+        body = createBody(x, y, world);
+    }
+
+    GameObject(String texturePath, int x, int y, int width, int height, short cBits, World world, boolean dynamic) {
+        this.width = width;
+        this.height = height;
+
+        this.cBits = cBits;
+        this.dynamic = dynamic;
+        texture = new Texture(texturePath);
         body = createBody(x, y, world);
     }
 
@@ -32,7 +45,11 @@ public class GameObject {
     private Body createBody(float x, float y, World world) {
         BodyDef def = new BodyDef(); // def - defenition (определение) это объект, который содержит все данные, необходимые для посторения тела
 
-        def.type = BodyDef.BodyType.DynamicBody; // тип тела, который имеет массу и может быть подвинут под действием сил
+        if (this.dynamic){
+            def.type = BodyDef.BodyType.DynamicBody; // тип тела, который имеет массу и может быть подвинут под действием сил
+        } else {
+            def.type = BodyDef.BodyType.StaticBody;
+        }
         def.fixedRotation = true; // запрещаем телу вращаться вокруг своей оси
         Body body = world.createBody(def); // создаём в мире world объект по описанному нами определению
 
