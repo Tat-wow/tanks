@@ -1,0 +1,16 @@
+ru.samsung.gamestudio.android-jetified-lifecycle-viewmodel-savedstate-2.5.1-0 C:\Program Files\Java\jdk-24\caches\transforms-3\195174e1b5cd09163b7d7c650fe453ce\transformed\jetified-lifecycle-viewmodel-savedstate-2.5.1\res
+ru.samsung.gamestudio.android-core-1.8.0-1 C:\Program Files\Java\jdk-24\caches\transforms-3\27417e44b74064426015c08f0ad16748\transformed\core-1.8.0\res
+ru.samsung.gamestudio.android-jetified-annotation-experimental-1.1.0-2 C:\Program Files\Java\jdk-24\caches\transforms-3\4bd68b9a2bd6b7f17c3cc2bd7bcb2401\transformed\jetified-annotation-experimental-1.1.0\res
+ru.samsung.gamestudio.android-jetified-savedstate-1.2.0-3 C:\Program Files\Java\jdk-24\caches\transforms-3\4f34328e47eb0dc4e5924953853d25b4\transformed\jetified-savedstate-1.2.0\res
+ru.samsung.gamestudio.android-lifecycle-viewmodel-2.5.1-4 C:\Program Files\Java\jdk-24\caches\transforms-3\61bac87749978abc87a6ff9ed63f516a\transformed\lifecycle-viewmodel-2.5.1\res
+ru.samsung.gamestudio.android-lifecycle-runtime-2.5.1-5 C:\Program Files\Java\jdk-24\caches\transforms-3\6b28db95a253264e5a871d8742be16db\transformed\lifecycle-runtime-2.5.1\res
+ru.samsung.gamestudio.android-jetified-activity-1.5.1-6 C:\Program Files\Java\jdk-24\caches\transforms-3\6e31b224b225bd0e13deab35523c80e2\transformed\jetified-activity-1.5.1\res
+ru.samsung.gamestudio.android-lifecycle-livedata-core-2.5.1-7 C:\Program Files\Java\jdk-24\caches\transforms-3\8271d88926c33ecca48a7e3b4948f0c9\transformed\lifecycle-livedata-core-2.5.1\res
+ru.samsung.gamestudio.android-fragment-1.5.7-8 C:\Program Files\Java\jdk-24\caches\transforms-3\a2fd3556e3c46e386f610643147546e2\transformed\fragment-1.5.7\res
+ru.samsung.gamestudio.android-pngs-9 C:\tanks\android\build\generated\res\pngs\debug
+ru.samsung.gamestudio.android-resValues-10 C:\tanks\android\build\generated\res\resValues\debug
+ru.samsung.gamestudio.android-packageDebugResources-11 C:\tanks\android\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+ru.samsung.gamestudio.android-packageDebugResources-12 C:\tanks\android\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+ru.samsung.gamestudio.android-merged_res-13 C:\tanks\android\build\intermediates\merged_res\debug
+ru.samsung.gamestudio.android-android-14 C:\tanks\android\res
+ru.samsung.gamestudio.android-debug-15 C:\tanks\android\src\debug\res
