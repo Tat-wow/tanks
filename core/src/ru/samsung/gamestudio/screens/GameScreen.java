@@ -38,7 +38,7 @@ public class GameScreen extends ScreenAdapter {
 
         contactManager = new ContactManager(myGdxGame.world);
 
-        this.tank = new Tank(720, 720, 200, 160, GameResources.TANK_IMG_PATH, myGdxGame.world);
+        tank = new Tank(720, 720, 200, 160, GameResources.TANK_IMG_PATH, myGdxGame.world);
         wall = new WallObject(500, 300, 100, 100, GameResources.WALL_ING_PATH, myGdxGame.world);
         bulletArray = new ArrayList<>();
         button_left = new ButtonView(0, 0, 130, 130, GameResources.BUTTON_LEFT_PATH);

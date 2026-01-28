@@ -24,10 +24,11 @@ public class ContactManager {
 
                 int cDef = fixA.getFilterData().categoryBits;
                 int cDef2 = fixB.getFilterData().categoryBits;
-                if ((cDef == GameSettings.BULLET_BIT || cDef2 == GameSettings.BULLET_BIT) && cDef != cDef2){
+                if (cDef == GameSettings.WALL_BIT && cDef2 == GameSettings.BULLET_BIT
+                        || cDef2 == GameSettings.WALL_BIT && cDef == GameSettings.BULLET_BIT){
                     ((GameObject) fixA.getUserData()).hit();
                     ((GameObject) fixB.getUserData()).hit();
-                };
+                }
             }
 
             @Override

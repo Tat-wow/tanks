@@ -14,7 +14,7 @@ public class Tank extends GameObject {
     int livesLeft;
     int rotation;
     TextureRegion textureRegion;
-    private World world;
+    private final World world;
 
     public Tank(int y, int x, int width, int height, String texturePath, World world) {
         super(texturePath, x, y, width, height, GameSettings.SHIP_BIT, world);
@@ -102,5 +102,10 @@ public class Tank extends GameObject {
                 height,
                 1, 1,
                 rotation);
+    }
+
+    @Override
+    public void hit() {
+        livesLeft -= 1;
     }
 }

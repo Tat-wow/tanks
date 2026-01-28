@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
 import ru.samsung.gamestudio.screens.GameScreen;
 import ru.samsung.gamestudio.screens.MenuScreen;
@@ -34,6 +35,8 @@ public class MyGdxGame extends Game {
 
 	@Override
 	public void create() {
+		Box2D.init();
+
 		batch = new SpriteBatch();
         world = new World(new Vector2(0, 0), true);
 		camera = new OrthographicCamera();

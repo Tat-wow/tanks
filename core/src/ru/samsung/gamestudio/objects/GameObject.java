@@ -53,11 +53,12 @@ public class GameObject {
         def.fixedRotation = true; // запрещаем телу вращаться вокруг своей оси
         Body body = world.createBody(def); // создаём в мире world объект по описанному нами определению
 
-        CircleShape circleShape = new CircleShape(); // задаём коллайдер в форме круга
-        circleShape.setRadius(Math.max(width, height) * SCALE / 2f); // определяем радиус круга коллайдера
+        // ИСПРАВЛЕНО: теперь прямоугольный коллайдер
+        PolygonShape polygonShape = new PolygonShape();
+        polygonShape.setAsBox(width * SCALE / 2f, height * SCALE / 2f); // прямоугольник по размерам объекта
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circleShape; // устанавливаем коллайдер
+        fixtureDef.shape = polygonShape; // устанавливаем коллайдер
         fixtureDef.density = 0.1f; // устанавливаем плотность тела
         fixtureDef.friction = 1f; // устанвливаем коэффициент трения
         fixtureDef.filter.categoryBits = cBits;
@@ -65,11 +66,12 @@ public class GameObject {
         Fixture fixture = body.createFixture(fixtureDef);
         fixture.setUserData(this);
 
-        circleShape.dispose(); // так как коллайдер уже скопирован в fixutre, то circleShape может быть отчищена, чтобы не забивать оперативную память.
+        polygonShape.dispose(); // так как коллайдер уже скопирован в fixutre, то polygonShape может быть отчищена, чтобы не забивать оперативную память.
 
         body.setTransform(x * SCALE, y * SCALE, 0); // устанавливаем позицию тела по координатным осям и угол поворота
         return body;
     }
+
 
     public int getX() {
         return (int) (body.getPosition().x / SCALE);

@@ -9,7 +9,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.1'
+        classpath 'com.android.tools.build:gradle:8.1.2'
         
 
     }
@@ -20,9 +20,9 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "Space cleaner"
-        gdxVersion = '1.12.1'
-        roboVMVersion = '2.3.20'
+        appName = "Tanks2026"
+        gdxVersion = '1.12.0'
+        roboVMVersion = '2.3.22'
         box2DLightsVersion = '1.5'
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
