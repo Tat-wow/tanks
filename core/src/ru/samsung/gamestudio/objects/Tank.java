@@ -17,7 +17,7 @@ public class Tank extends GameObject {
     private final World world;
 
     public Tank(int y, int x, int width, int height, String texturePath, World world) {
-        super(texturePath, x, y, width, height, GameSettings.SHIP_BIT, world);
+        super(texturePath, x, y, width, height, GameSettings.TANK_BIT, world);
         this.world = world;
         livesLeft = 3;
         textureRegion = new TextureRegion(getTexture());

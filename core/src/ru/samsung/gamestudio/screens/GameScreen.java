@@ -11,9 +11,7 @@ import ru.samsung.gamestudio.GameResources;
 import ru.samsung.gamestudio.MyGdxGame;
 import ru.samsung.gamestudio.components.ButtonView;
 import ru.samsung.gamestudio.managers.ContactManager;
-import ru.samsung.gamestudio.objects.BulletObject;
-import ru.samsung.gamestudio.objects.Tank;
-import ru.samsung.gamestudio.objects.WallObject;
+import ru.samsung.gamestudio.objects.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,6 +22,8 @@ public class GameScreen extends ScreenAdapter {
     MyGdxGame myGdxGame;
     Tank tank;
     WallObject wall;
+    EnemyTank enemy;
+    NexusObject nexus;
     ButtonView button_up;
     ButtonView button_down;
     ButtonView button_right;
@@ -40,6 +40,8 @@ public class GameScreen extends ScreenAdapter {
 
         tank = new Tank(720, 720, 200, 160, GameResources.TANK_IMG_PATH, myGdxGame.world);
         wall = new WallObject(500, 300, 100, 100, GameResources.WALL_ING_PATH, myGdxGame.world);
+        enemy = new EnemyTank(720, 1000, 100, 50, GameResources.TANK_IMG_PATH, myGdxGame.world);
+        nexus = new NexusObject(100, 600, 200, 160, GameResources.NEXUS_IMG_PATH, myGdxGame.world);
         bulletArray = new ArrayList<>();
         button_left = new ButtonView(0, 0, 130, 130, GameResources.BUTTON_LEFT_PATH);
         button_right = new ButtonView(260, 0, 130, 130, GameResources.BUTTON_RIGHT_PATH);
@@ -52,6 +54,20 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta){
         handleInput();
         updateBullets();
+
+        enemy.move();
+
+        if (enemy.needToShoot()) {
+            BulletObject bullet = enemy.shoot();
+            if (bullet != null) {
+                bulletArray.add(bullet);
+            }
+        }
+
+        if (nexus.getHit()) {
+            // если база уничтожается - выигрышь или проигрыш?
+        }
+
         draw();
         myGdxGame.stepWorld();
     }
@@ -125,6 +141,8 @@ public class GameScreen extends ScreenAdapter {
         button_up.draw(myGdxGame.batch);
         button_shoot.draw(myGdxGame.batch);
         wall.draw(myGdxGame.batch);
+        enemy.draw(myGdxGame.batch);
+        nexus.draw(myGdxGame.batch);
         tank.draw(myGdxGame.batch);
         for (BulletObject bullet : bulletArray) bullet.draw(myGdxGame.batch);
         myGdxGame.batch.end();

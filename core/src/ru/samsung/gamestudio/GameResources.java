@@ -14,4 +14,5 @@ public class GameResources {
     public static final String WALL_ING_PATH = "textures/wall.png";
 
     public static final String BUTTON_LONG_BG_IMG_PATH = "textures/button_long.png";
+    public static final String NEXUS_IMG_PATH = "textures/nexus/nexus.png";
 }
