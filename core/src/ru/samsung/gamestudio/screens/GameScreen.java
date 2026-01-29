@@ -187,6 +187,7 @@ public class GameScreen extends ScreenAdapter {
                     if (!anyKeyPressed && !Gdx.input.isTouched()) {
                         tank.move(0);
                     }
+                    break;
                 case PAUSED:
                     if (continueButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
                         gameSession.resumeGame();
@@ -197,6 +198,7 @@ public class GameScreen extends ScreenAdapter {
                     }
                     break;
             }
+        }
 
 
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
@@ -221,7 +223,6 @@ public class GameScreen extends ScreenAdapter {
             if (!Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) && !Gdx.input.isTouched()) {
                 tank.move(0);
             }
-        }
     }
 
     private void updateBullets() {
