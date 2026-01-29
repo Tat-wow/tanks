@@ -29,7 +29,7 @@ public class ContactManager {
 
                 if ((cDef == GameSettings.BULLET_BIT && cDef2 == GameSettings.ENEMY_TANK_BIT) ||
                         (cDef2 == GameSettings.BULLET_BIT && cDef == GameSettings.ENEMY_TANK_BIT)) {
-                    
+
                     GameObject objA = (GameObject) fixA.getUserData();
                     GameObject objB = (GameObject) fixB.getUserData();
 

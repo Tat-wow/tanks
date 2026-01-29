@@ -52,9 +52,9 @@ public class GameScreen extends ScreenAdapter {
         enemyArray = new ArrayList<>();
 
         //добавляем танки
-        enemyArray.add(new EnemyTank(720, 1000, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
-        enemyArray.add(new EnemyTank(500, 800, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
-        enemyArray.add(new EnemyTank(300, 600, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(720, 1000, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(500, 800, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(300, 600, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
 
         bulletArray = new ArrayList<>();
         button_left = new ButtonView(0, 0, 130, 130, GameResources.BUTTON_LEFT_PATH);
@@ -65,9 +65,9 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void restart_game() {
-        enemyArray.add(new EnemyTank(720, 1000, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
-        enemyArray.add(new EnemyTank(500, 800, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
-        enemyArray.add(new EnemyTank(300, 600, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(720, 1000, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(500, 800, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(300, 600, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
         bulletArray.clear();
         enemyArray.clear();
 
@@ -76,6 +76,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta){
         handleInput();
+
         updateBullets();
 
         updateEnemies();

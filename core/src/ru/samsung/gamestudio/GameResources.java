@@ -8,7 +8,8 @@ public class GameResources {
     public static final String FONT_PATH = "fonts/Montserrat-Bold.ttf";
     public static final String LIVE_IMG_PATH = "";
 
-    public static final String TANK_IMG_PATH = "textures/tank/tank_up.jpeg";
+    public static final String TANK_IMG_PATH = "textures/tank/tank_up.png";
+    public static final String ENEMY_IMG_PATH = "textures/tank/tank_enemy.png";
     public static final String TARGET_PNG_PATH = "textures/arrows/target.png";
     public static final String BULLET_IMG_PATH = "textures/tank/bullet_up.png";
     public static final String WALL_ING_PATH = "textures/wall.png";
