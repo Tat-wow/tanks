@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+
 import ru.samsung.gamestudio.GameResources;
 import ru.samsung.gamestudio.MapMaker;
 import ru.samsung.gamestudio.MyGdxGame;
@@ -34,6 +35,7 @@ public class GameScreen extends ScreenAdapter {
     ArrayList<WallObject> wallArray;
 
     ArrayList<BulletObject> bulletArray;
+    ArrayList<EnemyTank> enemyArray;
 
 
     public GameScreen(MyGdxGame myGdxGame) {
@@ -47,6 +49,13 @@ public class GameScreen extends ScreenAdapter {
         String mapString = mapMaker.makeMap();
         createWallsFromMap(mapString);
         enemy = new EnemyTank(720, 1000, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world);
+        enemyArray = new ArrayList<>();
+
+        //добавляем танки
+        enemyArray.add(new EnemyTank(720, 1000, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(500, 800, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(300, 600, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
+
         bulletArray = new ArrayList<>();
         button_left = new ButtonView(0, 0, 130, 130, GameResources.BUTTON_LEFT_PATH);
         button_right = new ButtonView(260, 0, 130, 130, GameResources.BUTTON_RIGHT_PATH);
@@ -55,26 +64,57 @@ public class GameScreen extends ScreenAdapter {
         button_shoot = new ButtonView(1400, 150, 130, 120, GameResources.TARGET_PNG_PATH);
     }
 
+    public void restart_game() {
+        enemyArray.add(new EnemyTank(720, 1000, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(500, 800, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(300, 600, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world));
+        bulletArray.clear();
+        enemyArray.clear();
+
+    }
+
     @Override
     public void render(float delta){
         handleInput();
         updateBullets();
 
-        enemy.move();
-
-        if (enemy.needToShoot()) {
-            BulletObject bullet = enemy.shoot();
-            if (bullet != null) {
-                bulletArray.add(bullet);
-            }
-        }
+        updateEnemies();
 
         if (nexus.getHit()) {
-            // проигрышь
+            restart_game();
+            myGdxGame.setScreen(myGdxGame.menuScreen);
+        }
+
+        if (enemyArray.isEmpty()) {
+            restart_game();
+            myGdxGame.setScreen(myGdxGame.menuScreen);
         }
 
         draw();
         myGdxGame.stepWorld();
+    }
+
+    private void updateEnemies() {
+        Iterator<EnemyTank> iterator = enemyArray.iterator();
+        while (iterator.hasNext()) {
+            EnemyTank enemy = iterator.next();
+
+            if (enemy.isDestroyed()) {
+                enemy.dispose();
+                myGdxGame.world.destroyBody(enemy.body);
+                iterator.remove();
+                continue;
+            }
+
+            enemy.move();
+
+            if (enemy.needToShoot()) {
+                BulletObject bullet = enemy.shoot();
+                if (bullet != null) {
+                    bulletArray.add(bullet);
+                }
+            }
+        }
     }
 
     private void createWallsFromMap(String mapString) {
@@ -181,7 +221,9 @@ public class GameScreen extends ScreenAdapter {
         button_right.draw(myGdxGame.batch);
         button_up.draw(myGdxGame.batch);
         button_shoot.draw(myGdxGame.batch);
-        enemy.draw(myGdxGame.batch);
+        for (EnemyTank enemy : enemyArray) {
+            enemy.draw(myGdxGame.batch);
+        }
         nexus.draw(myGdxGame.batch);
         tank.draw(myGdxGame.batch);
         for (BulletObject bullet : bulletArray) bullet.draw(myGdxGame.batch);
