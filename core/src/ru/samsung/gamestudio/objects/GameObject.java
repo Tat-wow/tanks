@@ -2,6 +2,7 @@ package ru.samsung.gamestudio.objects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 import static ru.samsung.gamestudio.GameSettings.SCALE;
@@ -43,32 +44,56 @@ public class GameObject {
     }
 
     private Body createBody(float x, float y, World world) {
-        BodyDef def = new BodyDef(); // def - defenition (определение) это объект, который содержит все данные, необходимые для посторения тела
+        BodyDef def = new BodyDef();
 
-        if (this.dynamic){
-            def.type = BodyDef.BodyType.DynamicBody; // тип тела, который имеет массу и может быть подвинут под действием сил
+        if (this.dynamic) {
+            def.type = BodyDef.BodyType.DynamicBody;
         } else {
             def.type = BodyDef.BodyType.StaticBody;
         }
-        def.fixedRotation = true; // запрещаем телу вращаться вокруг своей оси
-        Body body = world.createBody(def); // создаём в мире world объект по описанному нами определению
+        def.fixedRotation = true;
+        Body body = world.createBody(def);
 
-        // ИСПРАВЛЕНО: теперь прямоугольный коллайдер
-        PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(width * SCALE / 2f, height * SCALE / 2f); // прямоугольник по размерам объекта
+        // ЗАКРУГЛЕННЫЙ ПРЯМОУГОЛЬНИК вместо круга
+        PolygonShape polyShape = new PolygonShape();
+
+        float halfWidth = width * SCALE / 2f;
+        float halfHeight = height * SCALE / 2f;
+        float radius = Math.min(halfWidth, halfHeight) * 0.2f; // радиус закругления 30% от меньшей стороны
+
+        // 8 вершин для закругленного прямоугольника
+        Vector2[] vertices = new Vector2[8];
+
+        // Левый верхний
+        vertices[0] = new Vector2(-halfWidth + radius, halfHeight);
+        vertices[1] = new Vector2(-halfWidth, halfHeight - radius);
+
+        // Правый верхний
+        vertices[2] = new Vector2(halfWidth - radius, halfHeight);
+        vertices[3] = new Vector2(halfWidth, halfHeight - radius);
+
+        // Правый нижний
+        vertices[4] = new Vector2(halfWidth, -halfHeight + radius);
+        vertices[5] = new Vector2(halfWidth - radius, -halfHeight);
+
+        // Левый нижний
+        vertices[6] = new Vector2(-halfWidth + radius, -halfHeight);
+        vertices[7] = new Vector2(-halfWidth, -halfHeight + radius);
+
+        polyShape.set(vertices);
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = polygonShape; // устанавливаем коллайдер
-        fixtureDef.density = 0.1f; // устанавливаем плотность тела
-        fixtureDef.friction = 1f; // устанвливаем коэффициент трения
+        fixtureDef.shape = polyShape;
+        fixtureDef.density = 0.1f;
+        fixtureDef.friction = 1f;
         fixtureDef.filter.categoryBits = cBits;
 
         Fixture fixture = body.createFixture(fixtureDef);
         fixture.setUserData(this);
 
-        polygonShape.dispose(); // так как коллайдер уже скопирован в fixutre, то polygonShape может быть отчищена, чтобы не забивать оперативную память.
+        polyShape.dispose();
 
-        body.setTransform(x * SCALE, y * SCALE, 0); // устанавливаем позицию тела по координатным осям и угол поворота
+        body.setTransform(x * SCALE, y * SCALE, 0);
         return body;
     }
 
