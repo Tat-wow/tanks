@@ -42,6 +42,8 @@ public class GameScreen extends ScreenAdapter {
     LiveView liveView;
     TextView pauseTextView;
     ButtonView pauseButton;
+    ButtonView homeButton;
+    ButtonView continueButton;
 
     ArrayList<BulletObject> bulletArray;
 
@@ -66,6 +68,8 @@ public class GameScreen extends ScreenAdapter {
         button_down = new ButtonView(130, 0, 130, 120, GameResources.BUTTON_DOWN_PATH);
         button_shoot = new ButtonView(1400, 150, 130, 120, GameResources.TARGET_PNG_PATH);
         pauseButton = new ButtonView(1400, 842, 150, 150, GameResources.PAUSE_IMAGE_PATH);
+        homeButton = new ButtonView(700, 542, 300, 300, GameResources.HOME_BUTTON_IMAGE_PATH);
+        continueButton = new ButtonView(700, 242, 300, 300, GameResources.PLAY_BUTTON_IMAGE_PATH);
         pauseTextView = new TextView(myGdxGame.largeWhiteFont, 700, 842, "Pause");
         fullWhiteoutView = new ImageView(350, 0, GameResources.WHITEOUT_IMAGE_PATH);
     }
@@ -183,6 +187,15 @@ public class GameScreen extends ScreenAdapter {
                     if (!anyKeyPressed && !Gdx.input.isTouched()) {
                         tank.move(0);
                     }
+                case PAUSED:
+                    if (continueButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                        gameSession.resumeGame();
+                        restartGame();
+                    }
+                    if (homeButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                        myGdxGame.setScreen(myGdxGame.menuScreen);
+                    }
+                    break;
             }
 
 
@@ -256,9 +269,10 @@ public class GameScreen extends ScreenAdapter {
         tank.draw(myGdxGame.batch);
         for (BulletObject bullet : bulletArray) bullet.draw(myGdxGame.batch);
         if (gameSession.state == GameState.PAUSED) {
-            System.out.println("paused");
             fullWhiteoutView.draw(myGdxGame.batch);
             pauseTextView.draw(myGdxGame.batch);
+            homeButton.draw(myGdxGame.batch);
+            continueButton.draw(myGdxGame.batch);
         }
         myGdxGame.batch.end();
     }

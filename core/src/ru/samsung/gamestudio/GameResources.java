@@ -21,4 +21,6 @@ public class GameResources {
     public static final String DESTROY_SOUND_PATH = "sounds/destroy.mp3";
     public static final String PAUSE_IMAGE_PATH = "textures/pause_icon.png";
     public static final String WHITEOUT_IMAGE_PATH = "textures/white_plat.png";
+    public static final String HOME_BUTTON_IMAGE_PATH = "textures/home_button.png";
+    public static final String PLAY_BUTTON_IMAGE_PATH = "textures/play_button.png";
 }
