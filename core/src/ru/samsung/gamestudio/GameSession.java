@@ -8,7 +8,6 @@ import java.util.Random;
 import ru.samsung.gamestudio.managers.MemoryManager;
 
 public class GameSession {
-    long sessionStartTime;
     public GameState state;
     byte battleCount;
     Random r;

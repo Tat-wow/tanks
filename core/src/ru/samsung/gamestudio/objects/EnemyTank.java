@@ -18,6 +18,7 @@ public class EnemyTank extends GameObject {
     int currentDirection;
     Random random;
     private World world;
+    boolean isDestroyed;
 
     public EnemyTank(int y, int x, int width, int height, String texturePath, World world) {
         super(texturePath, x, y, width, height, GameSettings.ENEMY_TANK_BIT, world);
@@ -32,7 +33,7 @@ public class EnemyTank extends GameObject {
     }
 
     public boolean needToTurn() {
-        return TimeUtils.millis() - lastDirectionChangeTime >= 5000;
+        return TimeUtils.millis() - lastDirectionChangeTime >= 2000;
     }
 
     public boolean needToShoot() {
@@ -77,6 +78,10 @@ public class EnemyTank extends GameObject {
 
     public void move() {
 
+        if (isDestroyed) {
+            return;
+        }
+
         if (needToTurn()) {
             currentDirection = random.nextInt(5);
             lastDirectionChangeTime = TimeUtils.millis();
@@ -105,7 +110,18 @@ public class EnemyTank extends GameObject {
         }
     }
 
+    @Override
+    public void hit() {
+        livesLeft--;
+        if (livesLeft <= 0) {
+            isDestroyed = true;
+            // Можно сразу уничтожить тело здесь или пометить для удаления
+        }
+    }
+
     public void draw(SpriteBatch batch) {
+        if (isDestroyed) {return;}
+
         batch.draw(textureRegion,
                 getX() - (width / 2f),
                 getY() - (height / 2f),
@@ -117,10 +133,8 @@ public class EnemyTank extends GameObject {
                 rotation);
     }
 
-//    public void takeDamage() {
-//        livesLeft--;
-//        if (livesLeft <= 0) {
-//            dispose();
-//        }
-//    }
+    public boolean isDestroyed() {
+        return isDestroyed;
+    }
+
 }
