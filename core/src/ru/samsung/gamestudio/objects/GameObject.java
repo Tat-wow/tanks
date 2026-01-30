@@ -54,14 +54,11 @@ public class GameObject {
         def.fixedRotation = true;
         Body body = world.createBody(def);
 
-        // ЗАКРУГЛЕННЫЙ ПРЯМОУГОЛЬНИК вместо круга
         PolygonShape polyShape = new PolygonShape();
 
         float halfWidth = width * SCALE / 2f;
         float halfHeight = height * SCALE / 2f;
-        float radius = Math.min(halfWidth, halfHeight) * 0.2f; // радиус закругления 30% от меньшей стороны
-
-        // 8 вершин для закругленного прямоугольника
+        float radius = Math.min(halfWidth, halfHeight) * 0.3f;
         Vector2[] vertices = new Vector2[8];
 
         // Левый верхний

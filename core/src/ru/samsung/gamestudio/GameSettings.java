@@ -16,8 +16,8 @@ public class GameSettings {
     public static final short ENEMY_TANK_BIT = 2;
 
     public static final float BULLET_VELOCITY = 40;
-    public static final float TANK_SPEED = 20;
-    public static final int BULLET_WIDTH = 20;
-    public static final int BULLET_HEIGHT = 30;
+    public static final float TANK_SPEED = 5;
+    public static final int BULLET_WIDTH = 10;
+    public static final int BULLET_HEIGHT = 10;
     public static final long SHOOTING_COOL_DOWN = 1000;
 }

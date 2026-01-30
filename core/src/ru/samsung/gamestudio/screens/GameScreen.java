@@ -30,7 +30,6 @@ public class GameScreen extends ScreenAdapter {
     MyGdxGame myGdxGame;
     Tank tank;
     GameSession gameSession;
-    EnemyTank enemy;
     NexusObject nexus;
     ButtonView button_up;
     ButtonView button_down;
@@ -42,6 +41,7 @@ public class GameScreen extends ScreenAdapter {
     ArrayList<WallObject> wallArray;
     LiveView liveView;
     TextView pauseTextView;
+    TextView endTextView;
     ButtonView pauseButton;
     ButtonView homeButton;
     ButtonView continueButton;
@@ -62,13 +62,12 @@ public class GameScreen extends ScreenAdapter {
         mapMaker = new MapMaker();
         String mapString = mapMaker.makeMap();
         createWallsFromMap(mapString);
-        enemy = new EnemyTank(720, 1000, 65, 65, GameResources.TANK_IMG_PATH, myGdxGame.world);
         enemyArray = new ArrayList<>();
 
         //добавляем танки
         enemyArray.add(new EnemyTank(720, 1000, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
-        enemyArray.add(new EnemyTank(500, 800, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
-        enemyArray.add(new EnemyTank(300, 600, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(700, 800, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(730, 600, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
 
         bulletArray = new ArrayList<>();
         button_left = new ButtonView(0, 0, 130, 130, GameResources.BUTTON_LEFT_PATH);
@@ -80,30 +79,40 @@ public class GameScreen extends ScreenAdapter {
         homeButton = new ButtonView(700, 542, 300, 300, GameResources.HOME_BUTTON_IMAGE_PATH);
         continueButton = new ButtonView(700, 242, 300, 300, GameResources.PLAY_BUTTON_IMAGE_PATH);
         pauseTextView = new TextView(myGdxGame.largeWhiteFont, 700, 842, "Pause");
+        endTextView = new TextView(myGdxGame.largeWhiteFont, 650, 842, "You Lost");
         fullWhiteoutView = new ImageView(350, 0, GameResources.WHITEOUT_IMAGE_PATH);
     }
 
     @Override
-    public void render(float delta){
+    public void show() {
+        restartGame();
+    }
+
+    @Override
+    public void render(float delta) {
         handleInput();
         if (gameSession.state == GameState.PLAYING) {
             updateBullets();
             updateWalls();
 
-        updateEnemies();
+            updateEnemies();
 
-        if (nexus.getHit()) {
-            restart_game();
-            myGdxGame.setScreen(myGdxGame.menuScreen);
+            if (nexus.getHit()) {
+                gameSession.endGame();
+            }
+
+            if (!tank.isAlive()){
+                gameSession.endGame();
+            }
+
+            if (enemyArray.isEmpty()) {
+                restartGame();
+            }
+            liveView.setLeftLives(tank.livesLeft());
+
+            myGdxGame.stepWorld();
         }
-
-        if (enemyArray.isEmpty()) {
-            restart_game();
-            myGdxGame.setScreen(myGdxGame.menuScreen);
-        }
-
         draw();
-        myGdxGame.stepWorld();
     }
 
     private void updateEnemies() {
@@ -120,19 +129,20 @@ public class GameScreen extends ScreenAdapter {
 
             enemy.move();
 
-        if (enemy.needToShoot()) {
-            BulletObject bullet = enemy.shoot();
-            if (bullet != null) {
-                bulletArray.add(bullet);
+            if (enemy.needToShoot()) {
+                BulletObject bullet = enemy.shoot();
+                if (bullet != null) {
+                    bulletArray.add(bullet);
+                }
             }
-        }
 
-        if (nexus.getHit()) {
-            // проигрышь
-        }
+            if (nexus.getHit()) {
+                gameSession.endGame();
+            }
 
-        draw();
-        myGdxGame.stepWorld();
+            draw();
+            myGdxGame.stepWorld();
+        }
     }
 
     private void createWallsFromMap(String mapString) {
@@ -210,8 +220,7 @@ public class GameScreen extends ScreenAdapter {
                         BulletObject bullet = tank.needToShoot();
                         if (bullet != null) {
                             bulletArray.add(bullet);
-                            if (myGdxGame.audioManager.isSoundOn)
-                                myGdxGame.audioManager.shootSound.play(0.04f);
+                            myGdxGame.audioManager.shootSound.play(0.02f);
                         }
                     }
                     if (!anyKeyPressed && !Gdx.input.isTouched()) {
@@ -221,10 +230,16 @@ public class GameScreen extends ScreenAdapter {
                 case PAUSED:
                     if (continueButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
                         gameSession.resumeGame();
-                        restartGame();
                     }
                     if (homeButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
                         myGdxGame.setScreen(myGdxGame.menuScreen);
+                        restartGame();
+                    }
+                    break;
+                case ENDED:
+                    if (homeButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                        myGdxGame.setScreen(myGdxGame.menuScreen);
+                        restartGame();
                     }
                     break;
             }
@@ -262,7 +277,7 @@ public class GameScreen extends ScreenAdapter {
             if (bullet.hasToBeDestroyed()) {
                 bullet.dispose();
                 myGdxGame.world.destroyBody(bullet.body);
-                if (myGdxGame.audioManager.isSoundOn) myGdxGame.audioManager.explosionSound.play(0.04f);
+                myGdxGame.audioManager.explosionSound.play(0.02f);
                 iterator.remove();
             }
         }
@@ -307,6 +322,11 @@ public class GameScreen extends ScreenAdapter {
             homeButton.draw(myGdxGame.batch);
             continueButton.draw(myGdxGame.batch);
         }
+        if (gameSession.state == GameState.ENDED) {
+            fullWhiteoutView.draw(myGdxGame.batch);
+            endTextView.draw(myGdxGame.batch);
+            homeButton.draw(myGdxGame.batch);
+        }
         myGdxGame.batch.end();
     }
 
@@ -322,10 +342,18 @@ public class GameScreen extends ScreenAdapter {
             wallArray.remove(i--);
         }
 
+        for (int i = 0; i < enemyArray.size(); i++) {
+            myGdxGame.world.destroyBody(enemyArray.get(i).body);
+            enemyArray.remove(i--);
+        }
+
         wallArray = new ArrayList<>();
         mapMaker = new MapMaker();
         String mapString = mapMaker.makeMap();
         createWallsFromMap(mapString);
+        enemyArray.add(new EnemyTank(720, 1000, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(700, 800, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
+        enemyArray.add(new EnemyTank(730, 600, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
 
         if (tank != null) {
             myGdxGame.world.destroyBody(tank.body);

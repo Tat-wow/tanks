@@ -64,16 +64,16 @@ public class Tank extends GameObject {
 
             switch (rotation) {
                 case 0: // вверх
-                    bulletY += height / 2 + 20;
+                    bulletY += height / 2 + 40;
                     break;
                 case 90: // влево
-                    bulletX -= width / 2 + 20;
+                    bulletX -= width / 2 + 40;
                     break;
                 case 180: // вниз
-                    bulletY -= height / 2 + 20;
+                    bulletY -= height / 2 + 40;
                     break;
                 case 270: // вправо
-                    bulletX += width / 2 + 20;
+                    bulletX += width / 2 + 40;
                     break;
             }
 
