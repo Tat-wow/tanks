@@ -42,6 +42,7 @@ public class GameScreen extends ScreenAdapter {
     LiveView liveView;
     TextView pauseTextView;
     TextView endTextView;
+    TextView scoreCount;
     ButtonView pauseButton;
     ButtonView homeButton;
     ButtonView continueButton;
@@ -80,6 +81,7 @@ public class GameScreen extends ScreenAdapter {
         continueButton = new ButtonView(700, 242, 300, 300, GameResources.PLAY_BUTTON_IMAGE_PATH);
         pauseTextView = new TextView(myGdxGame.largeWhiteFont, 700, 842, "Pause");
         endTextView = new TextView(myGdxGame.largeWhiteFont, 650, 842, "You Lost");
+        scoreCount = new TextView(myGdxGame.largeWhiteFont, 550, 542, "0");
         fullWhiteoutView = new ImageView(350, 0, GameResources.WHITEOUT_IMAGE_PATH);
     }
 
@@ -124,6 +126,7 @@ public class GameScreen extends ScreenAdapter {
                 enemy.dispose();
                 myGdxGame.world.destroyBody(enemy.body);
                 iterator.remove();
+                gameSession.updateScore();
                 continue;
             }
 
@@ -326,6 +329,9 @@ public class GameScreen extends ScreenAdapter {
             fullWhiteoutView.draw(myGdxGame.batch);
             endTextView.draw(myGdxGame.batch);
             homeButton.draw(myGdxGame.batch);
+            scoreCount = new TextView(myGdxGame.largeWhiteFont, 750, 342, "Score: " +
+                    Integer.toString(gameSession.getScore()));
+            scoreCount.draw(myGdxGame.batch);
         }
         myGdxGame.batch.end();
     }
@@ -351,6 +357,7 @@ public class GameScreen extends ScreenAdapter {
         mapMaker = new MapMaker();
         String mapString = mapMaker.makeMap();
         createWallsFromMap(mapString);
+        gameSession.delScore();
         enemyArray.add(new EnemyTank(720, 1000, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
         enemyArray.add(new EnemyTank(700, 800, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));
         enemyArray.add(new EnemyTank(730, 600, 65, 65, GameResources.ENEMY_IMG_PATH, myGdxGame.world));

@@ -4,11 +4,9 @@ import java.util.Random;
 
 public class GameSession {
     public GameState state;
-    byte battleCount;
     Random r;
 
     private int score;
-    int destructedTrashNumber;
 
 
     public GameSession() {
@@ -31,16 +29,15 @@ public class GameSession {
         return score;
     }
 
-    public void destructionRegistration() {
-        destructedTrashNumber += 1;
-    }
-
     public void updateScore() {
-        System.out.println("update");
+        score += 100;
     }
 
     public void endGame() {
-        updateScore();
         state = GameState.ENDED;
+    }
+
+    public void delScore() {
+        score = 0;
     }
 }
